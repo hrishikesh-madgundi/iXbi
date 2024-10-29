@@ -1,0 +1,26 @@
+<%- include('includes/header') %>
+  
+<div class="container py-md-5 container--narrow">
+  <div class="d-flex justify-content-between">
+    <h2><%= post.title %></h2>
+    <% if(post.isVisitorOwner){ %>
+      <span class="pt-2">
+        <a href="/edit-post/<%= post._id %>" class="text-primary mr-2" data-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
+        <form class="delete-post-form d-inline" action="/delete-post/<%= post._id %>" method="POST">
+          <button class="delete-post-button text-danger" data-toggle="tooltip" title="Delete"><i class="fas fa-trash"></i></button>
+        </form>
+      </span>
+    <% } %>
+  </div>
+    
+  <p class="text-muted small mb-4">
+    <a href="#"><img class="avatar-tiny" src="<%= post.author.avatar %>"></a>
+    Posted by <a href="/profile/<%= post.author.username %>"><%= post.author.username %></a> on <%= post.createdDate.toLocaleDateString() %>
+  </p>
+
+  <div class="body-content">
+    <%= post.body %>
+  </div>
+</div>
+  
+<%- include('includes/footer') %>
