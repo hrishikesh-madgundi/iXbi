@@ -4,9 +4,11 @@ const md5 = require('md5');
 
 const userCollection = require('../db').db().collection("users");
 
-let User = function (data) {
+let User = function (data, getAvatar) {
     this.data = data;
     this.errors = [];
+    if(getAvatar == undefined)(getAvatar = false) 
+    if(getAvatar) {this.getAvatar()}
 };
 
 User.prototype.cleanUp = function() {
@@ -99,6 +101,32 @@ User.prototype.login = function() {
 
 User.prototype.getAvatar = function(){
     this.avatar = `https://gravatar.com/avatar/${md5(this.data.email)}?s=128`
+}
+
+User.findByUsername = function(username){
+    return new Promise((resolve, reject) => {
+        if(typeof(username) != 'string'){
+            reject();
+            return;
+        }
+        userCollection.findOne({username: username}).then(userDoc => {
+            if(userDoc){
+                userDoc = new User(userDoc, true);
+                userDoc = {
+                    _id : userDoc.data._id,
+                    username: userDoc.data.username,
+                    avatar: userDoc.avatar,
+                    profile: userDoc.data.profile
+                }
+                resolve(userDoc);
+            }
+            else{
+                reject("error finding user");
+            }
+        }).catch(()=>{
+            reject("db error!!")
+        })
+    })
 }
 
 module.exports = User;
