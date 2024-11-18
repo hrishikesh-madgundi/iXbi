@@ -20,7 +20,7 @@ connectToDb().then(client => {
     module.exports = client; // Export the db client after successful connection
 
     const app = require('./app');
-    app.listen(8000, () => {
+    app.listen(process.env.PORT, () => {
         console.log("listening on 8000...");
     });
 }).catch(err => {
