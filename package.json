@@ -1,7 +1,9 @@
 {
   "scripts": {
     "start": "node db",
-    "watch": "nodemon db --ignore frontend-js --ignore public/ && start webpack --watch"
+    "build": "webpack --mode production",
+    "dev": "nodemon db --ignore frontend-js --ignore public/ && webpack --watch",
+    "postinstall": "webpack --mode production"
   },
   "dependencies": {
     "@babel/core": "^7.26.0",
